@@ -1,0 +1,143 @@
+<header>
+    <div class="logos">
+        <div class="logo headhover">
+            <img src="{{ url_for('static', filename='images/Frame 1.svg') }}" alt="">
+        </div>
+        <div class="icono1 headhover">
+            <i class="material-icons-outlined">widgets</i>
+            <p class="icono1_right">Departamentos</p>
+        </div>
+        <div class="icono2 headhover dropdown" id="dropdownToggle">
+            <i class="material-icons-outlined slide-icon">settings</i>
+            <p class="icono2_right mb-0">Servicios</p>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url_for('listar_cliente') }}">Gestión de Clientes</a>
+                <a class="dropdown-item" href="{{ url_for('listar_producto') }}">Gestión de Productos</a>
+                <a class="dropdown-item" href="{{ url_for('listar_orden') }}">Gestión de Ordenes</a>
+                <a class="dropdown-item" href="{{ url_for('listar_pago') }}">Gestión de Pagos</a>
+                <a class="dropdown-item" href="{{ url_for('listar_comentarios') }}">Gestión de Comentarios</a>
+                <a class="dropdown-item" href="{{ url_for('listar_facturacion') }}">Gestión de Facturacion</a>
+                
+            </div>
+        </div>
+    
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var dropdown = document.getElementById('dropdownToggle');
+                dropdown.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+    
+                document.addEventListener('click', function (event) {
+                    if (!dropdown.contains(event.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            });
+        </script>
+    
+        <div class="headsearch">
+            <div class="inputsearch">
+                <input type="search" placeholder="Busca todo lo que quieras en línea">
+            </div>
+            <div class="iconobusqueda">
+                <i class="material-icons-outlined">search</i>
+            </div>
+        </div>
+        <div class="icono3 headhover">
+            <div class="icon3">
+                <span class="material-symbols-outlined">
+                    heart_plus
+                    </span>
+            </div>
+            <div class="sub">
+                <p class="abajo">Favoritos</p>
+            </div>
+        </div>
+        <div class="icono3 headhover">
+            <div class="icon3">
+                <span class="material-symbols-outlined">
+                    person_add
+                    </span>
+            </div>
+            <div class="sub">
+                <p class="arriba1">Inicia</p>
+                <p class="abajo1"> Sesión</p>
+            </div>
+        
+            
+            <div class="espacio"></div>
+            
+            <div class="carrito headhover">
+                <a href="../redireccion_iconos/carrito.html">
+                    <div class="iconocarrito">
+                        <span class="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                        <p class="precio">$0.00</p>
+                    </div>
+                    <div class="carrito_valor">
+                        <p class="valor">0</p>
+                    </div>
+                </a>
+            </div>                
+        </div>
+    </div>
+    <div class="header_bottom">
+        <div class="icono-left">
+            <div class="icono4-left">
+                <div class="icono_mano">
+                    <span class="material-symbols-outlined">
+                        pan_tool_alt
+                        </span>
+                </div>
+                <div class="info">
+                    <p>Quieres buscar mas articulos?</p>
+                </div>
+                <div class="mas">
+                    <span class="material-symbols-outlined">
+                        expand_more
+                        </span>
+                </div>
+                <div class="spaser">
+                    <pre>|</pre>
+                </div>
+                <div class="ubicacion">
+                    <span class="material-symbols-outlined">
+                        location_on
+                        </span>
+                </div>
+                
+                <div class="pais">
+                    <p>Bolivia,Cochabamba</p>
+                </div>
+    
+                <div class="casa">
+                    <span class="material-symbols-outlined">
+                        warehouse
+                        </span>
+                </div>
+                <div class="espacio2"></div>
+                
+                <div class="hbleft_info3">
+                    <p>Bolivia Supercenter</p>
+                </div>
+        
+            </div>
+        </div>
+        <div class="etiquetas_right">
+            <p class="subrayado"><a href="">Ofertas</a></p>
+            <p class="subrayado"><a href="../indices/decoracion.html">Decoración del hogar</a></p>
+            <p class="subrayado"><a href="../indices/mobiliario.html">Mobiliario</a></p>
+            <p class="subrayado"><a href="../indices/dormitorio.html">Dormitorio</a></p>
+            <p class="subrayado"><a href="../indices/cocina.html">Cocina</a></p>
+            <p class="subrayado"><a href="{{ url_for('bano') }}">Ofertas</a></p>
+            <p class="subrayado"><a href="../indices/electronica.html">Electrónica e Iluminación</a></p>
+            <p class="subrayado"><a href="../indices/limpieza.html">Limpieza y organización</a></p>                
+        </div>            
+    </div>
+</header>

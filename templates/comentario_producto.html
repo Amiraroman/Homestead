@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Comentarios de Productos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Comentarios de Productos</h5>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarComentario">Agregar Comentario</button>
+            <table class="table table-bordered table-striped table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Comentario</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Puntuación</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comentario in comentarios %}
+                        <tr>
+                            <td>{{ comentario.id_comentario }}</td>
+                            <td>{{ comentario.fecha }}</td>
+                            <td>{{ comentario.comentario }}</td>
+                            <td>{{ comentario.producto.nombre }}</td>
+                            <td>{{ comentario.puntuacion }}</td>
+                            <td>{{ comentario.cliente.nombre }} {{ comentario.cliente.apellido }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="editarComentario('{{ comentario.id_comentario }}', '{{ comentario.fecha }}', '{{ comentario.comentario }}', '{{ comentario.id_producto }}','{{ comentario.puntuacion }}', '{{ comentario.id_cliente }}')">Editar</button>
+                                <a href="{{ url_for('eliminar_comentario', id_comentario=comentario.id_comentario) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar comentario -->
+<div class="modal fade" id="modalAgregarComentario" tabindex="-1" aria-labelledby="modalAgregarComentarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarComentarioLabel">Agregar Comentario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('agregar_comentario_producto') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="comentario" class="form-label">Comentario</label>
+                        <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="puntuacion" class="form-label">Puntuación</label>
+                        <input type="number" class="form-control" id="puntuacion" name="puntuacion" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="idProducto" class="form-label">Producto</label>
+                        <select class="form-select" id="idProducto" name="id_producto" required>
+                            <option value="">Selecciona un producto</option>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="idCliente" class="form-label">Cliente</label>
+                        <select class="form-select" id="idCliente" name="id_cliente" required>
+                            <option value="">Selecciona una opción</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input type="hidden" name="fecha" value="{{ fecha_actual }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar comentario -->
+<div class="modal fade" id="modalEditarComentario" tabindex="-1" aria-labelledby="modalEditarComentarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarComentarioLabel">Editar Comentario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editarComentarioForm" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="editarIdComentario" name="id_comentario">
+                    <div class="mb-3">
+                        <label for="editarComentario" class="form-label">Comentario</label>
+                        <textarea class="form-control" id="editarComentario" name="comentario" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarPuntuacion" class="form-label">Puntuación</label>
+                        <input type="number" class="form-control" id="editarPuntuacion" name="puntuacion" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarIdProducto" class="form-label">Producto</label>
+                        <select class="form-select" id="editarIdProducto" name="id_producto" required>
+                            <option value="">Selecciona un producto</option>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarIdCliente" class="form-label">Cliente</label>
+                        <select class="form-select" id="editarIdCliente" name="id_cliente" required>
+                            <option value="">Selecciona una opción</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarFecha" class="form-label">Fecha</label>
+                        <input type="text" class="form-control" id="editarFecha" name="fecha" value="{{ fecha_actual }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ url_for('static', filename='js/scriptComentario.js') }}"></script>
+{% endblock %}
+
+
+
+

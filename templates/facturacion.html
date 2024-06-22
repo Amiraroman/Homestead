@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Facturación {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Facturación</h5>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarFacturacion">Agregar Facturación</button>
+            <table class="table table-bordered table-striped table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Número Facturación</th>
+                        <th scope="col">Monto</th>
+                        <th scope="col">Código CUF</th>
+                        <th scope="col">Fecha Facturación</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for facturacion in facturaciones %}
+                        <tr>
+                            <td>{{ facturacion.id_facturacion }}</td>
+                            <td>{{ facturacion.numero_facturacion }}</td>
+                            <td>{{ facturacion.monto }}</td>
+                            <td>{{ facturacion.codigo_cuf }}</td>
+                            <td>{{ facturacion.fecha_facturacion }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="editarFacturacion('{{ facturacion.id_facturacion }}', '{{ facturacion.numero_facturacion }}', '{{ facturacion.monto }}', '{{ facturacion.codigo_cuf }}', '{{ facturacion.fecha_facturacion }}', '{{ facturacion.id_pago }}')">Editar</button>
+                                <a href="{{ url_for('eliminar_facturacion', id_facturacion=facturacion.id_facturacion) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar facturación -->
+<div class="modal fade" id="modalAgregarFacturacion" tabindex="-1" aria-labelledby="modalAgregarFacturacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarFacturacionLabel">Agregar Facturación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('agregar_facturacion') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="numero_facturacion" class="form-label">Número Facturación</label>
+                        <input type="text" class="form-control" id="numero_facturacion" name="numero_facturacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="monto" class="form-label">Monto</label>
+                        <input type="text" class="form-control" id="monto" name="monto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigo_cuf" class="form-label">Código CUF</label>
+                        <input type="text" class="form-control" id="codigo_cuf" name="codigo_cuf" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_facturacion" class="form-label">Fecha Facturación</label>
+                        <input type="text" class="form-control" id="fecha_facturacion" name="fecha_facturacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_pago" class="form-label">ID Pago</label>
+                        <input type="text" class="form-control" id="id_pago" name="id_pago" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal para editar facturación -->
+<div class="modal fade" id="modalEditarFacturacion" tabindex="-1" aria-labelledby="modalEditarFacturacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editarFacturacionForm" action="/facturacion/editar/" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarFacturacionLabel">Editar Facturación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editarIdFacturacion" name="id_facturacion">
+                    <div class="mb-3">
+                        <label for="editarNumeroFacturacion" class="form-label">Número Facturación</label>
+                        <input type="text" class="form-control" id="editarNumeroFacturacion" name="numero_facturacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarMonto" class="form-label">Monto</label>
+                        <input type="text" class="form-control" id="editarMonto" name="monto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarCodigoCUF" class="form-label">Código CUF</label>
+                        <input type="text" class="form-control" id="editarCodigoCUF" name="codigo_cuf" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarFechaFacturacion" class="form-label">Fecha Facturación</label>
+                        <input type="text" class="form-control" id="editarFechaFacturacion" name="fecha_facturacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarIdPago" class="form-label">ID Pago</label>
+                        <input type="text" class="form-control" id="editarIdPago" name="id_pago" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ url_for('static', filename='js/scriptFacturacion.js') }}"></script>
+{% endblock %}

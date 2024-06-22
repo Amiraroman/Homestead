@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Pagos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Pagos</h5>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPago">Agregar Pago</button>
+            <table class="table table-bordered table-striped table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Fecha de Pago</th>
+                        <th scope="col">Método de Pago</th>
+                        <th scope="col">Monto</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                        <tr>
+                            <td>{{ pago.id_pago }}</td>
+                            <td>{{ pago.fecha_pago }}</td>
+                            <td>{{ pago.metodo_pago }}</td>
+                            <td>{{ pago.monto_pago }}</td>
+                            <td>{{ pago.estado_pago }}</td>
+                            <td>{{ pago.cliente.nombre }} {{ pago.cliente.apellido }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="editarPago('{{ pago.id_pago }}', '{{ pago.fecha_pago }}', '{{ pago.metodo_pago }}', '{{ pago.monto_pago }}', '{{ pago.estado_pago }}', '{{ pago.id_cliente }}')">Editar</button>
+                                <a href="{{ url_for('eliminar_pago', id_pago=pago.id_pago) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar pago -->
+<div class="modal fade" id="modalAgregarPago" tabindex="-1" aria-labelledby="modalAgregarPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarPagoLabel">Agregar Pago</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('agregar_pago') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="fecha_pago" class="form-label">Fecha de Pago</label>
+                        <input type="text" class="form-control" id="fecha_pago" name="fecha_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metodo_pago" class="form-label">Método de Pago</label>
+                        <input type="text" class="form-control" id="metodo_pago" name="metodo_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="monto_pago" class="form-label">Monto</label>
+                        <input type="text" class="form-control" id="monto_pago" name="monto_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="estado_pago" class="form-label">Estado</label>
+                        <input type="text" class="form-control" id="estado_pago" name="estado_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_cliente" class="form-label">Cliente</label>
+                        <select class="form-select" id="id_cliente" name="id_cliente" required>
+                            <option value="">Selecciona una opción</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar pago -->
+
+
+<div class="modal fade" id="modalEditarPago" tabindex="-1" aria-labelledby="modalEditarPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarPagoLabel">Editar Pago</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editarPagoForm" action="/pago/editar/" method="POST">
+                <input type="hidden" id="editarIdPago" name="id_pago">
+                <div class="modal-body">
+                    <input type="hidden" id="editarIdPago" name="id_pago">
+                    <div class="mb-3">
+                        <label for="editarFechaPago" class="form-label">Fecha de Pago</label>
+                        <input type="text" class="form-control" id="editarFechaPago" name="fecha_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarMetodoPago" class="form-label">Método de Pago</label>
+                        <input type="text" class="form-control" id="editarMetodoPago" name="metodo_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarMontoPago" class="form-label">Monto</label>
+                        <input type="text" class="form-control" id="editarMontoPago" name="monto_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarEstadoPago" class="form-label">Estado</label>
+                        <input type="text" class="form-control" id="editarEstadoPago" name="estado_pago" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarIdCliente" class="form-label">Cliente</label>
+                        <select class="form-select" id="editarIdCliente" name="editarIdClientePago" required>
+                            <option value="">Selecciona una opción</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ url_for('static', filename='js/scriptPago.js') }}"></script>
+{% endblock javascripts %}
